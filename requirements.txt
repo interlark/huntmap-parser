@@ -1,0 +1,5 @@
+bs4==0.0.1
+pyproj==3.3.0
+selenium-wire==4.6.0
+shapely==1.8.0
+geojson==2.5.0
