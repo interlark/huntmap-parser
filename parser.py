@@ -15,7 +15,6 @@ from sys import platform
 import geojson
 from bs4 import BeautifulSoup
 from pyproj import Transformer
-from selenium import webdriver
 from shapely.geometry import mapping as shapely_mapping
 from shapely.geometry import shape
 from shapely.ops import transform as shapely_transform
