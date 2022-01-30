@@ -69,13 +69,13 @@ def get_index_dict(driver):
     # get index links
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     root_item = soup.select_one(SELECTOR_INDEX_LINKS_ROOT)
-    root_childrens = [x for x in root_item.children if x.name is not None]
+    root_children = [x for x in root_item.children if x.name is not None]
     index_items = {}
     i = 0
-    while i < len(root_childrens)-3:
-        elem_h2 = root_childrens[i]
-        elem_p = root_childrens[i+1]
-        elem_ul = root_childrens[i+2]
+    while i < len(root_children)-3:
+        elem_h2 = root_children[i]
+        elem_p = root_children[i+1]
+        elem_ul = root_children[i+2]
 
         if elem_h2.name == 'h2' and elem_p.name == 'p' and elem_ul.name == 'ul':
             index_items[elem_h2.get_text()] = {a.get_text(): a['href'] for a in elem_ul.find_all('a')}
