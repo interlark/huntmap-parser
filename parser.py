@@ -62,7 +62,7 @@ def get_index_dict(driver):
         ...
     }
 
-    :param driver WebDriver
+    :param driver: WebDriver
     '''
     driver.get(URL_HUNTMAP_INDEX)
 
@@ -170,8 +170,8 @@ def parse_page(url, driver):
     '''
     Парсинг гео-данных со страницы.
 
-    :param url URL страницы с картой
-    :param driver WebDriver
+    :param url: URL страницы с картой
+    :param driver: WebDriver
     '''
 
     logging.info(f'Ожидание загрузки запросов: {BROWSER_PAGE_WAIT} секунд')
@@ -213,10 +213,10 @@ def save_result(data, county, region, output_path):
     '''
     Сохранение промежуточных файлов.
 
-    :param data словарь со слоями и geojson features 
-    :param county Округ
-    :param region Регион
-    :param output_path Директория выходных файлов
+    :param data: Словарь со слоями и geojson features 
+    :param county: Округ
+    :param region: Регион
+    :param output_path: Директория выходных файлов
     '''
     county_dir = os.path.join(output_path, county)
     region_dir = os.path.join(county_dir, region)
@@ -245,7 +245,7 @@ def merge_result(output_path):
     '''
     Компиляция промежуточных файлов в один.
 
-    :param output_path Директория выходных файлов
+    :param output_path: Директория выходных файлов
     '''
     all_features = []
     for doc_file in glob(os.path.join(output_path, '*', '*', 'merged.geojson')):
@@ -264,7 +264,7 @@ def build_geojson_features(docs):
         ...
     }
 
-    :param docs Ответы сервера
+    :param docs: Ответы сервера
     '''
 
     # Конвертирование координат из одной системы в другую
@@ -357,7 +357,7 @@ def run(output_path):
     '''
     Запуск парсера.
 
-    :param output_path Директория выходных файлов
+    :param output_path: Директория выходных файлов
     '''
 
     seleniumwire_options = {
