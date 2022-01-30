@@ -35,12 +35,13 @@ BROWSER_HEADLESS = False
 BROWSER_LOAD_IMAGES = True
 BROWSER_PAGE_WAIT = 15  # wait (secs) for all async requests on a map page get completed
 
-# Системы координаты для конвертации (исходная и желаемая)
-GEO_SOURSE_SRS = '3857'  # EPSG
-GEO_TARGET_SRS = '4326'  # EPSG
+# Конвертирование систем координат
+GEO_CONVERT_COORDINATES = True  # Флаг для конвертации координат (True - сконвертировать, False - оставить как есть)
+GEO_SOURSE_SRS = '3857'  # EPSG (исходная)
+GEO_TARGET_SRS = '4326'  # EPSG (желаемая)
 
 # URLs
-HUNTMAP_URL_INDEX = 'https://huntmap.ru/spisok-gotovyh-kart-ohotugodij-regionov-rossii'
+URL_HUNTMAP_INDEX = 'https://huntmap.ru/spisok-gotovyh-kart-ohotugodij-regionov-rossii'
 
 # Selectors
 SELECTOR_INDEX_LINKS_ROOT = '.wpb_text_column.wpb_content_element > .wpb_wrapper'
@@ -63,7 +64,7 @@ def get_index_dict(driver):
 
     :param driver WebDriver
     '''
-    driver.get(HUNTMAP_URL_INDEX)
+    driver.get(URL_HUNTMAP_INDEX)
 
     # get index links
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -329,8 +330,9 @@ def build_geojson_features(docs):
                 else:
                     try:
                         geom = shape(vv)
-                        geom_converted = shapely_transform(convert_coordinates, geom)
-                        v_geom = shapely_mapping(geom_converted)
+                        if GEO_CONVERT_COORDINATES:
+                            geom = shapely_transform(convert_coordinates, geom)
+                        v_geom = shapely_mapping(geom)
                     except ValueError as e:
                         logging.warning('Ошибка в структуре геоданных у объекта с аттрибутами [' +\
                             f', '.join(f'{attr}:{val}' for attr, val in v_properties.items()) + ']:\n' + str(e))
