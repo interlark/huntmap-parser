@@ -266,13 +266,6 @@ def build_geojson_features(docs):
 
     :param docs: Ответы сервера
     '''
-
-    # Конвертирование координат из одной системы в другую
-    def convert_coordinates(x, y):
-        project = Transformer.from_crs(f'EPSG:{GEO_SOURSE_SRS}', f'EPSG:{GEO_TARGET_SRS}')
-        latitude, longitude = project.transform(x, y)  # X, Y (meters) -> lat, long (decimal degrees)
-        return longitude, latitude  # X -> longitude, Y -> latitude
-
     meta_docs, layer_docs = {}, {}
     attr_mapping = {}
     title_mapping = {}
@@ -331,7 +324,8 @@ def build_geojson_features(docs):
                     try:
                         geom = shape(vv)
                         if GEO_CONVERT_COORDINATES:
-                            geom = shapely_transform(convert_coordinates, geom)
+                            project = Transformer.from_crs(f'EPSG:{GEO_SOURSE_SRS}', f'EPSG:{GEO_TARGET_SRS}', always_xy=True)
+                            geom = shapely_transform(project.transform, geom)
                         v_geom = shapely_mapping(geom)
                     except ValueError as e:
                         logging.warning('Ошибка в структуре геоданных у объекта с аттрибутами [' +\
