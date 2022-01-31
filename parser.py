@@ -37,8 +37,8 @@ BROWSER_PAGE_WAIT = 15  # wait (secs) for all async requests on a map page get c
 
 # Конвертирование систем координат
 GEO_CONVERT_COORDINATES = True  # Флаг для конвертации координат (True - сконвертировать, False - оставить как есть)
-GEO_SOURSE_SRS = '3857'  # EPSG (исходная)
-GEO_TARGET_SRS = '4326'  # EPSG (желаемая)
+GEO_SOURSE_SRS = 3857  # EPSG (исходная), 3857: Web Mercator projection (Google Maps, OpenStreetMap, Web related stuff)
+GEO_TARGET_SRS = 4326  # EPSG (желаемая), 4326: WGS 84 aka World Geodetic System (GPS, Navigation, etc...)
 
 # URLs
 URL_HUNTMAP_INDEX = 'https://huntmap.ru/spisok-gotovyh-kart-ohotugodij-regionov-rossii'
@@ -83,88 +83,6 @@ def get_index_dict(driver):
         i += 1
 
     return index_items
-
-# def convert_srs_json(doc):
-#     '''
-#     Конвертирование системы координат документа от kosmosnimki.ru
-#     '''
-    
-#     # Обычное конвертирование координат
-#     def convert_coordinates(x, y):
-#         project = Transformer.from_crs(f'EPSG:{GEO_SOURSE_SRS}', f'EPSG:{GEO_TARGET_SRS}')
-#         latitude, longitude = project.transform(x, y)  # X, Y (meters) -> lat, long (decimal degrees)
-#         return longitude, latitude  # X -> longitude, Y -> latitude
-
-#     # Замена srs
-#     def replace_srs(doc):
-#         if isinstance(doc, dict):
-#             for k, v in doc.items():
-#                 if isinstance(v, dict):
-#                     doc[k] = replace_srs(v)
-#                 elif isinstance(v, list):
-#                     doc[k] = [replace_srs(x) if isinstance(x, (dict, list)) else x for x in v]
-
-#             if 'srs' in doc:
-#                 if doc['srs'] != GEO_SOURSE_SRS:
-#                     logging.warn(f'Найдено поле srs != {GEO_SOURSE_SRS}, srs == {doc["srs"]}')
-#                 doc['srs'] = GEO_TARGET_SRS
-        
-#         if isinstance(doc, list):
-#             for i in range(len(doc)):
-#                 doc[i] = replace_srs(doc[i])
-        
-#         return doc
-
-#     # Конвертирование boundary box
-#     def convert_bbox(doc):
-#         if isinstance(doc, dict):
-#             for k, v in doc.items():
-#                 if isinstance(v, dict):
-#                     doc[k] = convert_bbox(v)
-#                 elif isinstance(v, list):
-#                     doc[k] = [convert_bbox(x) if isinstance(x, (dict, list)) else x for x in v]
-            
-#             if 'bbox' in doc:
-#                 x_min, y_min, x_max, y_max = doc['bbox']
-#                 long_min, lat_min = convert_coordinates(x_min, y_min)
-#                 long_max, lat_max  = convert_coordinates(x_max, y_max)
-#                 doc['bbox'] = [long_min, lat_min, long_max, lat_max]
-        
-#         if isinstance(doc, list):
-#             for i in range(len(doc)):
-#                 doc[i] = convert_bbox(doc[i])
-        
-#         return doc
-    
-#     # Конвертирование геометрии, поиск по аттрибутам "type" и "coordinates"
-#     def convert_geometry(doc):
-#         if isinstance(doc, dict):
-#             for k, v in doc.items():
-#                 if isinstance(v, dict):
-#                     doc[k] = convert_geometry(v)
-#                 elif isinstance(v, list):
-#                     doc[k] = [convert_geometry(x) if isinstance(x, (dict, list)) else x for x in v]
-            
-#             if 'type' in doc and 'coordinates' in doc:
-#                 geom = shape(doc)
-#                 geom_converted = shapely_transform(convert_coordinates, geom)
-#                 geom_converted_doc = shapely_mapping(geom_converted)  # TODO: cast into lists instead of tuples?
-                
-#                 doc['coordinates'] = geom_converted_doc['coordinates']  # replace with converted coordinates
-
-#         if isinstance(doc, list):
-#             for i in range(len(doc)):
-#                 doc[i] = convert_geometry(doc[i])
-
-#         return doc
-
-#     ret = None
-#     try:
-#         ret = convert_geometry(convert_bbox(replace_srs(doc)))
-#     except Exception as e:
-#         raise CoordinatesConvertError() from e
-
-#     return ret
 
 def parse_page(url, driver):
     '''
