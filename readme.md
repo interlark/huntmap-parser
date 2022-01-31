@@ -6,8 +6,9 @@
 * [results.tree](https://github.com/interlark/huntmap-parser/blob/main/result.tree) – структура директорий результата (28.01.22)
 
 # Запуск
-```bash
-git clone https://github.com/interlark/huntmap-parser && cd huntmap-parser
-pip install -r requirements.txt
-python parser.py
-```
+1. Установить браузер [Google Chrome](https://www.google.com/chrome/)
+2. ```bash
+   git clone https://github.com/interlark/huntmap-parser && cd huntmap-parser
+   pip install -r requirements.txt
+   python parser.py
+   ```
