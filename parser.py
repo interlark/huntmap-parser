@@ -49,6 +49,7 @@ SELECTOR_MAP_IFRAME = '#kosmosnimki > iframe'
 
 # Other
 GENERATE_MERGED_FILES = False
+GEOJSON_ENCODING = 'utf-8'
 
 def get_index_dict(driver):
     '''
@@ -148,7 +149,7 @@ def save_result(data, county, region, output_path):
         if not os.path.isdir(region_dir):
             os.mkdir(region_dir)
         result_path = os.path.join(region_dir, f'{layer_title}.geojson')
-        with open(result_path, 'w') as f_json:
+        with open(result_path, 'w', encoding=GEOJSON_ENCODING) as f_json:
             features_collection = geojson.FeatureCollection(features)
             geojson.dump(features_collection, f_json, ensure_ascii=False, indent=4)
 
@@ -156,7 +157,7 @@ def save_result(data, county, region, output_path):
         # extra effort to combine all features into one file
         all_features_collection = geojson.FeatureCollection(sum(data.values(), []))
         all_merged_path = os.path.join(region_dir, 'merged.geojson')
-        with open(all_merged_path, 'w') as f_json:
+        with open(all_merged_path, 'w', encoding=GEOJSON_ENCODING) as f_json:
             geojson.dump(all_features_collection, f_json, ensure_ascii=False)
 
 def merge_result(output_path):
@@ -171,7 +172,7 @@ def merge_result(output_path):
             all_features.extend(geojson.load(f_doc)['features'])
 
     all_feature_collection = geojson.FeatureCollection(all_features)
-    with open(f'{output_path}/merged.geojson', 'w') as f_compiled:
+    with open(f'{output_path}/merged.geojson', 'w', encoding=GEOJSON_ENCODING) as f_compiled:
         geojson.dump(all_feature_collection, f_compiled, ensure_ascii=False)
 
 def build_geojson_features(docs):
