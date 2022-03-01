@@ -248,7 +248,7 @@ def build_geojson_features(docs):
                         v_geom = shapely_mapping(geom)
                     except ValueError as e:
                         logging.warning('Ошибка в структуре геоданных у объекта с аттрибутами [' +\
-                            f', '.join(f'{attr}:{val}' for attr, val in v_properties.items()) + ']:\n' + str(e))
+                            ', '.join(f'{attr}:{val}' for attr, val in v_properties.items()) + ']:\n' + str(e))
                         continue  # Пропуск объекта
 
             geo_feature = geojson.Feature(geometry=v_geom, properties=v_properties)
