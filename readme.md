@@ -13,6 +13,10 @@
    python parser.py
    ```
 # Структура директорий
+
+<details>
+  <summary>tree</summary>
+
 ```
 result
 ├── Дальневосточный федеральный округ
@@ -503,3 +507,4 @@ result
 
 82 directories, 403 files
 ```
+</details>
